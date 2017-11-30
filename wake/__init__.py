@@ -1,5 +1,7 @@
 from broth import Broth
+from os.path import isfile
 from requests import get
+from urllib.request import urlretrieve
 
 def clean_title(title):
     return title.replace("'","\\'").replace("`","\\`").replace('"','\\"').rstrip("\\")
