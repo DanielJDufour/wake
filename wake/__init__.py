@@ -1,6 +1,7 @@
 from broth import Broth
 from os.path import isfile
 from requests import get
+from subprocess import check_output
 from urllib.request import urlretrieve
 
 def clean_title(title):
@@ -37,11 +38,11 @@ def get_most_recent_available_dump():
         print(e)
         raise e
 
-def run_sql(sql_statement, debug=False):
+def run_sql(sql_statement, db_name='', debug=False):
     try:
         if debug: print("starting run_sql with:", sql_statement)
         sql_statement = sql_statement.replace('"', '\\"')
-        bash_command = '''mysql -u root genesis -e "''' + sql_statement + '''"'''
+        bash_command = '''mysql -u root ''' + db_name + ''' -e "''' + sql_statement + '''"'''
         if debug: print("bash_command:", bash_command)
         output = check_output(bash_command, shell=True).decode("utf-8")
         if debug: print("output: " + output)
