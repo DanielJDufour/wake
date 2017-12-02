@@ -18,3 +18,10 @@ figures out what Wikipedia dump has certain subdumps complete
 
 ### run_sql
 runs MySQL command using bash with no external, third-party connector library required
+```
+from wake import run_sql
+
+run_sql("SHOW DATABASES")
+
+run_sql("SELECT COUNT(*) FROM geo_tags", "geo_tags_db")
+```

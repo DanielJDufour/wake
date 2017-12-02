@@ -5,7 +5,7 @@ setup(
   packages = ['wake'],
   package_dir = {'wake': 'wake'},
   package_data = {'wake': ['__init__.py']},
-  version = '0.4',
+  version = '0.5',
   description = 'Wikipedia processing as easy as cAKE',
   author = 'Daniel J. Dufour',
   author_email = 'daniel.j.dufour@gmail.com',
