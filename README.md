@@ -25,3 +25,8 @@ run_sql("SHOW DATABASES")
 
 run_sql("SELECT COUNT(*) FROM geo_tags", "geo_tags_db")
 ```
+
+# test
+```
+python3 -m unittest wake.test
+```
