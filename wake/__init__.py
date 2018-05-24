@@ -259,7 +259,7 @@ def get_valid_english_wikipedia_pages(num_chunks=5000000000000, debug=False):
                 
                     if page_title not in blacklist and not page_text.startswith("#REDIRECT"):
                         
-                        yield page
+                        yield { "id": page_id, "title": page_title, "text": page_text }
                         
     except Exception as e:
         print("[wake.get_valid_english_wikipedia_pages] found exception:", e)
