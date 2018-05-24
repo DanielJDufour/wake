@@ -2,3 +2,4 @@
 setup.cfg
 setup.py
 wake/__init__.py
+wake/test.py

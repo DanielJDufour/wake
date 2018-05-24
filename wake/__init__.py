@@ -57,17 +57,22 @@ def clean_title(title):
     return title.replace("'","\\'").replace("`","\\`").replace('"','\\"').rstrip("\\")
     
 def find_index_of_sublist(items, target):
-    num_to_match = len(target)
-    matched = []
-    for index, item in enumerate(items):
-        if item == target[len(matched)]:
-            matched.append(index)
-            if len(matched) == num_to_match:
-                return (matched[0], matched[-1])
-        elif item == target[0]:
-            matched = [index]
-        else:
-            matched = []
+    try:
+        num_to_match = len(target)
+        matched = []
+        for index, item in enumerate(items):
+            if item == target[len(matched)]:
+                matched.append(index)
+                if len(matched) == num_to_match:
+                    return (matched[0], matched[-1])
+            elif item == target[0]:
+                matched = [index]
+            else:
+                matched = []
+        return (None, None)
+    except Exception as e:
+        print("[wake.find_index_of_sublist] hit error:", e)
+        raise(e)
 
 def get_links(page_text):
     try:
@@ -79,11 +84,17 @@ def get_links(page_text):
         brackets = [{"index": b.start(), "type": "open" if b.group(0) == "[[" else "close" } for b in brackets]
 
         while len(brackets) >= 2:
+
             types = [b["type"] for b in brackets]
+
             open_index, close_index = find_index_of_sublist(types, ["open", "close"])
+
+            if open_index is None or close_index is None:
+                print("[wake.get_links] breaking from loop because not able to find open and close in a row")
+                break
+
             link_text = page_text[brackets[open_index]["index"]+2:brackets[close_index]["index"]]
 
-            # remove from brackets and types
             brackets = [bracket for index, bracket in enumerate(brackets) if not (open_index <= index <= close_index)]
 
             parts = link_text.split("|")
@@ -94,6 +105,8 @@ def get_links(page_text):
 
         return links
     except Exception as e:
+        try: print("[wake.get_links] brackets:", brackets)
+        except: pass    
         print("[wake.get_links] hit exception:", e)
         raise(e)
             
