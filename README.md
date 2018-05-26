@@ -16,6 +16,12 @@ dowloads a url to the system's temp directory if a file by its name isn't alread
 ### get_most_recent_available_dump
 figures out what Wikipedia dump has certain subdumps complete
 
+### tokenize
+pass in the page text from a dump and get a list of tokens in return
+
+### get_links
+get links in an article(i.e. what's between '[[' and ']]')
+
 ### run_sql
 runs MySQL command using bash with no external, third-party connector library required
 ```

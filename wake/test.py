@@ -36,3 +36,8 @@ The Bonapartes moved to [[Marseille]] but in August Toulon offered itself to the
     open_index, close_index = wake.find_index_of_sublist(types, ["open", "close"])
     self.assertEqual(open_index, 1)
     self.assertEqual(close_index, 2)
+
+  def test_remove_references(self):
+    text = '""<ref name=""EB1910""/>'
+    cleaned = wake.remove_references(text)
+    self.assertEqual(cleaned, '""')

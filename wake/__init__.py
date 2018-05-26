@@ -6,6 +6,7 @@ from re import finditer
 from re import IGNORECASE
 from re import MULTILINE
 from re import sub
+from re import split
 from requests import get
 from subprocess import call
 from subprocess import check_output
@@ -49,8 +50,10 @@ def remove_text_between(text, start_text, end_text):
         raise(e)    
 
 def remove_references(text):
+    text = sub("<ref name=[^/\n\t\r<>]+/>", "", text)
     text = remove_text_between(text, start_text="<ref", end_text="</ref>")
     text = remove_text_between(text, start_text="{{refbegin", end_text="{{refend}}")
+    
     return text    
 
 def clean_title(title):
@@ -269,3 +272,6 @@ def clean_page_text(text):
     for value in patterns.values():
         text = sub(value["pattern"], value["repl"], text, flags=value["flags"])
     return text
+    
+def tokenize(page_text):
+    return split("[{}\n</>\]\[\(\)-=\|\# ']", page_text)    
