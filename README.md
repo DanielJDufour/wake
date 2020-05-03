@@ -36,3 +36,6 @@ run_sql("SELECT COUNT(*) FROM geo_tags", "geo_tags_db")
 ```
 python3 -m unittest wake.test
 ```
+
+# contact
+Post an issue! Thank you!
