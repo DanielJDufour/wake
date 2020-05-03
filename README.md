@@ -1,5 +1,5 @@
 # wake
-Wikipedia processing as easy as cAKE
+🍰 Making Wikipedia and Wikidata Processing Easy, Like Eating a Piece of Cake
 
 # installation
 ```
@@ -7,6 +7,16 @@ pip install wake
 ```
 
 # methods
+### get_wikidata_entities
+Stream Wikidata Entities
+```python
+from wake import get_wikidata_entities
+
+for entity in get_wikidata_entities():
+    print(entity)
+```
+
+
 ### clean_title
 takes in a title of a Wikipedia page as a string and escapes and cleans it of weird characters, so it can be put in a normal database
 
@@ -36,6 +46,9 @@ run_sql("SELECT COUNT(*) FROM geo_tags", "geo_tags_db")
 ```
 python3 -m unittest wake.test
 ```
+
+# license
+CC0-1.0 / Public Domain
 
 # contact
 Post an issue! Thank you!

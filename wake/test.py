@@ -1,10 +1,19 @@
 from os.path import abspath, dirname, join
-import unittest
+from unittest import TestCase
 import wake
 
 path_to_data = join(dirname(abspath(__file__)), "data")
 
-class TestMethods(unittest.TestCase):
+class WikidataEntityStreaming(TestCase):
+  def test_get_wikidata_entities(self):
+    entity_ids = set()
+    for index, entity in enumerate(wake.get_wikidata_entities()):
+      entity_ids.add(entity['id'])
+      if index == 4:
+        break
+    self.assertEqual(len(entity_ids), 5)
+
+class TestMethods(TestCase):
   
   def test_get_nested_links(self):
     text = """ish fleet defeated Alfred's fleet, which may have been weakened in the previous engagement.{{sfn|Woodruff|1993|p=86}}

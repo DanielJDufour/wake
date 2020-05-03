@@ -1,5 +1,6 @@
 from broth import Broth
 from bz2 import BZ2Decompressor
+from json import loads
 from os.path import isfile
 from re import findall
 from re import finditer
@@ -10,6 +11,7 @@ from re import split
 from requests import get
 from subprocess import call
 from subprocess import check_output
+from time import sleep
 from urllib.request import urlretrieve
 from urllib.request import urlopen
 import xml.etree.ElementTree as ET
@@ -274,4 +276,28 @@ def clean_page_text(text):
     return text
     
 def tokenize(page_text):
-    return split("[{}\n</>\]\[\(\)-=\|\# ']", page_text)    
+    return split("[{}\n</>\]\[\(\)-=\|\# ']", page_text)
+
+def get_wikidata_entities(sleep_time=5, chunk_size=16*1024, number_of_chunks=5000000000000):
+    decompressor = BZ2Decompressor()
+    req = urlopen('https://dumps.wikimedia.org/wikidatawiki/entities/latest-all.json.bz2')
+    text = b""
+
+    for n in range(number_of_chunks):
+        chunk = req.read(chunk_size)
+        if not chunk:
+            break
+        text += decompressor.decompress(chunk)
+
+        number_of_lines = text.count(b"\n")
+        for n in range(number_of_lines):
+            index = text.find(b"},\n")
+            if index == -1:
+                break
+
+            entity_source_text = text[:index + 1].replace(b"[\n", b"").decode("utf-8")
+            entity = loads(entity_source_text)
+            yield entity
+            text = text[index + 3:]
+        sleep(sleep_time)
+
