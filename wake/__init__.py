@@ -32,6 +32,14 @@ patterns = {
     "seealso": { "pattern": "{{see also[^}]*}}", "repl": "", "flags": IGNORECASE }
 }
 
+def safeget(dct, *keys):
+    for key in keys:
+        try:
+            dct = dct[key]
+        except:
+            return None
+    return dct
+
 def remove_text_between(text, start_text, end_text):
     try:
         start = 0
@@ -278,7 +286,14 @@ def clean_page_text(text):
 def tokenize(page_text):
     return split("[{}\n</>\]\[\(\)-=\|\# ']", page_text)
 
-def get_wikidata_entities(sleep_time=5, chunk_size=16*1024, number_of_chunks=5000000000000):
+def get_class_memberships(entity):
+    instances = safeget(entity, "claims", "P31")
+    if instances:
+        return set("Q" + str(safeget(i, "mainsnak", "datavalue", "value", "numeric-id")) for i in instances)
+    else:
+        return set()
+
+def get_wikidata_entities(sleep_time=1, chunk_size=16*1024, number_of_chunks=5000000000000, instance_of=None):
     decompressor = BZ2Decompressor()
     req = urlopen('https://dumps.wikimedia.org/wikidatawiki/entities/latest-all.json.bz2')
     text = b""
@@ -297,7 +312,10 @@ def get_wikidata_entities(sleep_time=5, chunk_size=16*1024, number_of_chunks=500
 
             entity_source_text = text[:index + 1].replace(b"[\n", b"").decode("utf-8")
             entity = loads(entity_source_text)
-            yield entity
+
+            if not instance_of or instance_of in get_class_memberships(entity):
+                yield entity
+
             text = text[index + 3:]
         sleep(sleep_time)
 

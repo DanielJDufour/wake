@@ -11,7 +11,7 @@ setup(
   packages = ['wake'],
   package_dir = {'wake': 'wake'},
   package_data = {'wake': ['__init__.py']},
-  version = '0.10.1',
+  version = '0.11.0',
   description = '🍰 Making Wikipedia and Wikidata Processing Easy, Like Eating a Piece of Cake',
   long_description=long_description,
   long_description_content_type="text/markdown",

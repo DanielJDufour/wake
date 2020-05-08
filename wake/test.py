@@ -6,12 +6,24 @@ path_to_data = join(dirname(abspath(__file__)), "data")
 
 class WikidataEntityStreaming(TestCase):
   def test_get_wikidata_entities(self):
+    print("starting test_get_wikidata_entities")
     entity_ids = set()
     for index, entity in enumerate(wake.get_wikidata_entities()):
       entity_ids.add(entity['id'])
       if index == 4:
         break
     self.assertEqual(len(entity_ids), 5)
+  def test_get_instances_of(self):
+    print("starting test_get_instances_of")
+    count = 0
+    for entity in wake.get_wikidata_entities(instance_of="Q5"):
+      count += 1
+      print("found human")
+      instances = entity['claims']['P31']
+      memberships = set("Q" + str(wake.safeget(i, "mainsnak", "datavalue", "value", "numeric-id")) for i in instances)
+      self.assertTrue('Q5' in memberships)
+      if count >= 5:
+        break
 
 class TestMethods(TestCase):
   
